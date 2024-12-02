@@ -26,7 +26,7 @@ def iniciar_juego():
     paleta_derecha =  Personaje(constantes.WIDTH -70 , constantes.HEIGHT // 2 - constantes.PERS_HEIGHT // 2) 
 
     #creamos instancia de la pelota
-    pelota = Pelota(constantes.WIDTH // 2)
+    pelota = Pelota(constantes.WIDTH // 2 - constantes.WIDTH_P // 2, constantes.HEIGHT // 2 - constantes.HEIGHT_P // 2)
 
     #definimos las variables de las paletas 
     mover_izquierda_arriba = False
@@ -41,7 +41,7 @@ def iniciar_juego():
         for event in pygame.event.get(): #recorro los eventos del juego  
             if event.type == pygame.QUIT: 
                 run = False #para cerrar el juego (cancela el while)
-
+            
             if event.type == pygame.KEYDOWN:  #LE DAMOS MOVIMIENTO AL PERSONAJE
                 if event.key == pygame.K_w:
                     mover_izquierda_arriba = True
@@ -72,7 +72,6 @@ def iniciar_juego():
 
         delta_y_izquierda = 0 #cuanto de la posicion iniciar me muevo en el siguiente frame
         delta_y_derecha = 0  
-
         if mover_izquierda_arriba == True:
             delta_y_izquierda = -constantes.VELOCIDAD 
         if mover_izquierda_abajo == True:
@@ -91,9 +90,27 @@ def iniciar_juego():
 
         paleta_izquierda.movimiento(delta_y_izquierda) #mandamos el movimiento
         paleta_derecha.movimiento(delta_y_derecha) 
+
+        pelota.movimiento()
+
+        pelota.rebotar(paleta_izquierda) #MANDAMOS A REBOTAR LA PELOTA
+        pelota.rebotar(paleta_derecha)
+        #verificamos que no haya sido punto para ninguno de los dos
+        if pelota.shape.left <= 0:
+            puntaje_derecha += 1
+            pelota.anotacion()
+        if pelota.shape.right >= constantes.WIDTH:
+            puntaje_izquierda += 1
+            pelota.anotacion()
+
         #dibujamos el movimiento
         paleta_izquierda.dibujar(ventana)
         paleta_derecha.dibujar(ventana)
+        #inciamos la pelota
+        pelota.dibujar(ventana)
+
+
+        
         #dibujamos el puntaje 
         puntaje_texto = font.render(f"{puntaje_izquierda} - {puntaje_derecha}", True, (255, 255, 255))
         ventana.blit(puntaje_texto, (constantes.WIDTH // 2 - puntaje_texto.get_width() // 2, 20))

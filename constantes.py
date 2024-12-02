@@ -1,6 +1,6 @@
 #para las constantes del juego
 FPS = 60
-VELOCIDAD = 5 #velocidad de la paleta
+VELOCIDAD = 8 #velocidad de la paleta
 WIDTH = 800 #defino el ancho de la pantalla
 HEIGHT  = 600 #defino el alto de la pantalla
 COLOR_FONDO = (0,0, 20)
